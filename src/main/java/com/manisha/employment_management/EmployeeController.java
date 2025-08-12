@@ -21,8 +21,12 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<Employee> getEmployeesByLocation(@RequestParam String location) {
-        return employeeRepository.findByLocation(location);
+    public List<Employee> getEmployees(@RequestParam(required = false) String location) {
+        if (location == null || location.isEmpty()) {
+            return employeeRepository.findAll();
+        } else {
+            return employeeRepository.findByLocation(location);
+        }
     }
 
     @DeleteMapping("/{employeeId}")

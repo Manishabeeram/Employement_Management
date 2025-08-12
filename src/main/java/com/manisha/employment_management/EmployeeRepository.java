@@ -30,6 +30,18 @@ public class EmployeeRepository {
             }, location);
     }
 
+    public List<Employee> findAll() {
+        return jdbcTemplate.query("SELECT * FROM employees",
+            (rs, rowNum) -> {
+                Employee emp = new Employee();
+                emp.setEmployeeId(rs.getLong("employee_id"));
+                emp.setFirstName(rs.getString("first_name"));
+                emp.setLastName(rs.getString("last_name"));
+                emp.setLocation(rs.getString("location"));
+                return emp;
+            });
+    }
+
     public int deleteEmployee(String employeeId) {
         return jdbcTemplate.update("DELETE FROM employees WHERE employee_id = ?", employeeId);
     }

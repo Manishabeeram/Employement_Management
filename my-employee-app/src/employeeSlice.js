@@ -1,75 +1,59 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const fetchEmployeesByLocation = createAsyncThunk(
-  'employees/fetchByLocation',
-  async (location, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`/api/employees?location=${location}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
+export const fetchEmployees = createAsyncThunk('employees/fetchEmployees', async () => {
+	const response = await axios.get('/api/employees');
+	return response.data;
+});
 
-export const addEmployee = createAsyncThunk(
-  'employees/addEmployee',
-  async (employee, { rejectWithValue }) => {
-    try {
-      const response = await axios.post('/api/employees', employee);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
+export const addEmployee = createAsyncThunk('employees/addEmployee', async (employee) => {
+	const response = await axios.post('/api/employees', employee);
+	return response.data;
+});
 
-export const deleteEmployee = createAsyncThunk(
-  'employees/deleteEmployee',
-  async (employeeId, { rejectWithValue }) => {
-    try {
-      await axios.delete(`/api/employees/${employeeId}`);
-      return employeeId; 
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
+export const deleteEmployee = createAsyncThunk('employees/deleteEmployee', async (employeeId) => {
+	await axios.delete(`/api/employees/${employeeId}`);
+	return employeeId;
+});
 
+export const fetchEmployeesByLocation = createAsyncThunk('employees/fetchEmployeesByLocation', async (location) => {
+	const response = await axios.get(`/api/employees?location=${location}`);
+	return response.data;
+});
+
+const initialState = {
+	employees: [],
+	status: 'idle',
+	error: null,
+};
 
 const employeeSlice = createSlice({
-  name: 'employees',
-  initialState: {
-    list: [], 
-    status: 'idle', 
-    error: null,
-  },
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchEmployeesByLocation.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchEmployeesByLocation.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.list = action.payload; 
-      })
-      .addCase(fetchEmployeesByLocation.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
-      })
-      .addCase(addEmployee.fulfilled, (state, action) => {
-        console.log("Employee added successfully:", action.payload);
-      })
-      .addCase(deleteEmployee.fulfilled, (state, action) => {
-        state.list = state.list.filter(employee => employee.employeeId !== action.payload);
-      })
-      .addCase(deleteEmployee.rejected, (state, action) => {
-        state.error = action.payload;
-        console.error("Failed to delete employee:", action.payload);
-      });
-  },
+	name: 'employees',
+	initialState,
+	reducers: {},
+	extraReducers: (builder) => {
+		builder
+			.addCase(fetchEmployees.pending, (state) => {
+				state.status = 'loading';
+			})
+			.addCase(fetchEmployees.fulfilled, (state, action) => {
+				state.status = 'succeeded';
+				state.employees = action.payload;
+			})
+			.addCase(fetchEmployees.rejected, (state, action) => {
+				state.status = 'failed';
+				state.error = action.error.message;
+			})
+			.addCase(addEmployee.fulfilled, (state, action) => {
+				state.employees.push(action.payload);
+			})
+			.addCase(deleteEmployee.fulfilled, (state, action) => {
+				state.employees = state.employees.filter(emp => emp.employeeId !== action.payload);
+			})
+			.addCase(fetchEmployeesByLocation.fulfilled, (state, action) => {
+				state.employees = action.payload;
+			});
+	},
 });
 
 export default employeeSlice.reducer;

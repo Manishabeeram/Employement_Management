@@ -1,4 +1,3 @@
-
 import './App.css';
 import EmployeeList from './EmployeeList';
 
@@ -10,6 +9,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;

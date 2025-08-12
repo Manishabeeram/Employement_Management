@@ -1,12 +1,52 @@
-# React + Vite
+# Employment Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Setup Instructions
 
-Currently, two official plugins are available:
+### Backend (Spring Boot)
+1. Install Java 17+ and Maven.
+2. In the project root, run:
+   ```
+   mvn spring-boot:run
+   ```
+3. The backend will start on port 8080 (default).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Frontend (React)
+1. Install Node.js and npm.
+2. Navigate to `my-employee-app` folder:
+   ```
+   cd my-employee-app
+   npm install
+   npm run dev
+   ```
+3. The frontend will start on port 5173 (default).
 
-## Expanding the ESLint configuration
+## Running Tests
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Backend (JUnit)
+- In the project root, run:
+  ```
+  mvn test
+  ```
+- Test results are in `target/surefire-reports`.
+
+### Frontend (Jest)
+- In `my-employee-app`, run:
+  ```
+  npm test
+  ```
+- This will run all Jest tests (e.g., `EmployeeList.test.jsx`).
+
+## Features
+- Add employee
+- Filter employees by location
+- Delete employee
+- Fully tested backend and frontend
+
+## API Endpoints
+- `GET /api/employees` - List all employees
+- `POST /api/employees` - Add employee
+- `DELETE /api/employees/{id}` - Delete employee
+- `GET /api/employees?location=XYZ` - Filter by location
+
+## Contact
+For questions, contact the project owner.
