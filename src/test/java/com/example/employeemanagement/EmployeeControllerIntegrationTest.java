@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 import com.employment_management.Employee;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = com.manisha.employment_management.EmploymentManagementApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EmployeeControllerIntegrationTest {
 
     @LocalServerPort
@@ -22,11 +22,11 @@ public class EmployeeControllerIntegrationTest {
 
     @Test
     void addEmployeeTest() {
-        Employee employee = new Employee();
-        employee.setEmployeeId(101L);
-        employee.setFirstName("Jane");
-        employee.setLastName("Doe");
-        employee.setLocation("CA");
+    Employee employee = new Employee();
+    employee.setEmployeeId(null); // Let H2 auto-generate
+    employee.setFirstName("Jane");
+    employee.setLastName("Doe");
+    employee.setLocation("CA");
 
         ResponseEntity<Void> response = restTemplate.postForEntity(
             "http://localhost:" + port + "/api/employees", employee, Void.class);
